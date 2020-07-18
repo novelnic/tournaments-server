@@ -10,7 +10,7 @@ const matchSchema = new Schema({
   placement: Number,
   matchId: {
     type: String,
-    unique: true,
+    required: true,
   },
   startTime: Number,
   players: [
@@ -41,6 +41,20 @@ matchSchema.post('findOneAndDelete', match => {
     },
     { new: true }
   );
+});
+
+matchSchema.pre('validate', async function (next) {
+  let match = await Match.findOne({
+    matchId: this.matchId,
+    teamId: this.teamId,
+  });
+  if (match) {
+    this.invalidate(
+      'matchId',
+      'Pre validate: Match already exists for this team'
+    );
+  }
+  next();
 });
 
 const Match = mongoose.model('Match', matchSchema);

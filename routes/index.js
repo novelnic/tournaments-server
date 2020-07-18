@@ -10,7 +10,6 @@ router.use('/api/tournaments', tournamentRoutes);
 router.use('/api/teams', teamRoutes);
 router.use('/api/matches', matchRoutes);
 //router.use('/api/users', userRoutes);
-
 router.use('/api/auth', authRoutes);
 
 router.use('*', function (req, res) {
