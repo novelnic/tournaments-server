@@ -28,12 +28,14 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use(express.static('client/build'));
+
 // routes
 app.use(routes);
 
-// cron.schedule('*/5 * * * *', async () => {
-//   await Update.update();
-// });
+cron.schedule('*/5 * * * *', async () => {
+  await Update.update();
+});
 
 // Bootstrap server
 app.listen(PORT, () => {
