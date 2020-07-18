@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
 // routes
 app.use(routes);
 
-cron.schedule('*/1 * * * *', async () => {
+cron.schedule('*/5 * * * *', async () => {
   await Update.update();
 });
 
