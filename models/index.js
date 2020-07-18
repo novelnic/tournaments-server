@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
-const URI = require('../config/index');
 
-mongoose.connect(process.env.MONGODB_URI || URI, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true,
 });
 
 mongoose.connection.on('connected', () => {

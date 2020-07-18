@@ -1,8 +1,12 @@
 const router = require('express').Router();
 const tournamentRoutes = require('./tournaments');
+const teamRoutes = require('./teams');
+const matchRoutes = require('./matches');
 const path = require('path');
 
 router.use('/api/tournaments', tournamentRoutes);
+router.use('/api/teams', teamRoutes);
+router.use('/api/matches', matchRoutes);
 
 router.use(function (req, res) {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));

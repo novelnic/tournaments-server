@@ -1,30 +1,29 @@
 const Tournament = require('../models/Tournaments');
 
 module.exports = {
-  findAll: (req, res) => {
+  findAllTournaments: (req, res) => {
     Tournament.find(req.query)
       .then(tournaments => res.json(tournaments))
       .catch(err => res.status(422).json(err));
   },
-  findById: (req, res) => {
+  findTournamentById: (req, res) => {
     Tournament.findById(req.params.id)
       .then(tournament => res.json(tournament))
       .catch(err => res.status(422).json(err));
   },
-  create: (req, res) => {
+  createTournament: (req, res) => {
     Tournament.create(req.body)
       .then(newTournament => res.json(newTournament))
       .catch(err => res.status(422).json(err));
   },
-  update: (req, res) => {
-    Tournament.findOneAndUpdate({ _id: req.params.id }, req.body)
+  updateTournament: (req, res) => {
+    Tournament.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
       .then(tournament => res.json(tournament))
       .catch(err => res.status(422).json(err));
   },
-  remove: (req, res) => {
-    Tournament.findById({ _id: req.params.id })
-      .then(tournament => tournament.remove())
-      .then(allTournaments => res.json(allTournaments))
+  deleteTournament: (req, res) => {
+    Tournament.findOneAndDelete({ _id: req.params.id })
+      .then(deletedTournament => res.json(deletedTournament))
       .catch(err => res.status(422).json(err));
   },
 };

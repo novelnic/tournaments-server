@@ -3,13 +3,13 @@ const tournamentsController = require('../controllers/tournamentsController');
 
 router
   .route('/')
-  .get(tournamentsController.findAll)
-  .post(tournamentsController.create);
+  .get(tournamentsController.findAllTournaments)
+  .post(tournamentsController.createTournament);
 
 router
   .route('/:id')
-  .get(tournamentsController.findById)
-  .put(tournamentsController.update)
-  .delete(tournamentsController.remove);
+  .get(tournamentsController.findTournamentById)
+  .put(tournamentsController.updateTournament)
+  .delete(tournamentsController.deleteTournament);
 
 module.exports = router;
