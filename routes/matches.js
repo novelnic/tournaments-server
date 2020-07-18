@@ -1,15 +1,16 @@
 const router = require('express').Router();
+const auth = require('../middleware/auth');
 const matchController = require('../controllers/matchController');
 
 router
   .route('/')
   .get(matchController.findAllMatches)
-  .post(matchController.createMatch);
+  .post(auth, matchController.createMatch);
 
 router
   .route('/:id')
   .get(matchController.findMatchById)
-  .put(matchController.updateMatch)
-  .delete(matchController.deleteMatch);
+  .put(auth, matchController.updateMatch)
+  .delete(auth, matchController.deleteMatch);
 
 module.exports = router;

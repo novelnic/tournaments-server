@@ -31,13 +31,9 @@ app.use(function (req, res, next) {
 // routes
 app.use(routes);
 
-<<<<<<< HEAD
-cron.schedule('*/5 * * * *', async () => {
-=======
-cron.schedule('*/1 * * * *', async () => {
->>>>>>> 61eda18d7c1695b559e8c8d45edae9293b768d99
-  await Update.update();
-});
+// cron.schedule('*/5 * * * *', async () => {
+//   await Update.update();
+// });
 
 // Bootstrap server
 app.listen(PORT, () => {

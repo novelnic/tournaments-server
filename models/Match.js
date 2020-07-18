@@ -10,13 +10,7 @@ const matchSchema = new Schema({
   placement: Number,
   matchId: {
     type: String,
-    validate: {
-      validator: async v => {
-        let match = await Match.findOne({ matchId: v });
-        return match === null;
-      },
-      message: 'Match already exists',
-    },
+    unique: true,
   },
   startTime: Number,
   players: [
