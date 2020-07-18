@@ -12,7 +12,7 @@ router.use('/api/matches', matchRoutes);
 //router.use('/api/users', userRoutes);
 router.use('/api/auth', authRoutes);
 
-router.use(function (req, res) {
+router.use('*', function (req, res) {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
