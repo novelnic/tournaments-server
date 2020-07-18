@@ -4,12 +4,7 @@ const app = express();
 const routes = require('./routes');
 require('dotenv').config();
 const Update = require('./update');
-const COD = require('call-of-duty-api')();
 const cron = require('node-cron');
-const Tournament = require('./models/Tournaments');
-const { findAllTeams } = require('./controllers/teamController');
-const Team = require('./models/Team');
-const Match = require('./models/Match');
 
 const PORT = process.env.PORT || 5000;
 
