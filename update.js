@@ -33,7 +33,7 @@ const update = async () => {
             let savedMatch = matchesMap.get(match.matchID);
             if (savedMatch.team === match.player.team) {
               savedMatch.players.push({
-                name: match.player.username,
+                username: match.player.username,
                 kills: match.playerStats.kills,
               });
             } else {
