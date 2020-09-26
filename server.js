@@ -5,6 +5,8 @@ const routes = require('./routes');
 require('dotenv').config();
 const Update = require('./update');
 const cron = require('node-cron');
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 
 const PORT = process.env.PORT || 5000;
 
@@ -28,13 +30,24 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(express.static('client/build'));
-
 // routes
 app.use(routes);
 
 cron.schedule('*/5 * * * *', async () => {
-  await Update.update();
+  await Update.update(io);
+});
+
+io.on('connection', (socket) => {
+  console.log('socket connected');
+  socket.on('scores', ({ tournamnetId }) => {
+    console.log('recieved tournament id');
+    socket.join(tournamnetId);
+  });
+});
+
+cron.schedule('*/1 * * * *', async () => {
+  console.log('socket update..');
+  await Update.updateScores(io, '5f1204fcaeca153bb8a8dcc6');
 });
 
 // Bootstrap server

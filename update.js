@@ -3,10 +3,10 @@ const Team = require('./models/Team');
 const Match = require('./models/Match');
 const COD = require('call-of-duty-api')();
 
-const update = async () => {
+const update = async (io) => {
   console.log('updating...');
   let tournaments = await Tournament.find();
-  let activeTournaments = tournaments.filter(tourn => {
+  let activeTournaments = tournaments.filter((tourn) => {
     let start = new Date(0);
     start.setUTCSeconds(tourn.startTime);
     let end = new Date(0);
@@ -14,20 +14,20 @@ const update = async () => {
     return Date.now() > start && Date.now() < end;
   });
   await COD.login(process.env.ACTIVISION_USER, process.env.ACTIVISION_PASSWORD);
-  activeTournaments.forEach(async tournament => {
+  activeTournaments.forEach(async (tournament) => {
     let teams = await Team.find({ tournamentId: tournament._id });
-    teams.forEach(async team => {
+    teams.forEach(async (team) => {
       console.log('recording team', team.name);
       let matchesMap = new Map();
       let teamMatches = await Promise.all(
-        team.playerIds.map(async player => {
+        team.playerIds.map(async (player) => {
           let data = await COD.MWcombatwz(player, 'uno');
           return data.matches === null ? [] : data.matches;
         })
       );
-      teamMatches.forEach(playerMatches => {
+      teamMatches.forEach((playerMatches) => {
         console.log('# of matches: ', playerMatches.length);
-        playerMatches.forEach(match => {
+        playerMatches.forEach((match) => {
           if (matchesMap.has(match.matchID)) {
             console.log('match alread exists');
             let savedMatch = matchesMap.get(match.matchID);
@@ -72,7 +72,7 @@ const update = async () => {
             startTime: match.startTime,
             players: match.players,
           };
-          Match.create(matchData).catch(err => console.log(err.message));
+          Match.create(matchData).catch((err) => console.log(err.message));
           console.log(matchData);
         }
       });
@@ -80,4 +80,20 @@ const update = async () => {
   });
 };
 
-module.exports = { update };
+const updateScores = async (io, tId) => {
+  let teams = await Team.find({ tournamentId: tId });
+  teams = await Promise.all(
+    teams.map(async (team) => {
+      team.matches = await Promise.all(
+        team.matches.map(async (matchId) => {
+          return await Match.findById(matchId);
+        })
+      );
+      return team;
+    })
+  );
+
+  io.sockets.in(tId).emit('scores', teams);
+};
+
+module.exports = { update, updateScores };
